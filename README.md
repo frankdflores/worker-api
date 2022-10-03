@@ -101,4 +101,44 @@ Execute the following command:
 kubectl apply -f deployment/worker-api-deployment.yaml
 ```
 
+## Test Application
+
+Main Page for WorkerAPI [http://10.26.32.11/](http://10.26.32.11/)
+
+![MainPage](docs/mainpage.png?raw=true "WorkerAPI main page")
+
+Swagger [http://10.26.32.11/explorer/](http://10.26.32.11/explorer/)
+
+![Swagger](docs/swagger.png?raw=true "Swagger page")
+
+Execute POST
+
+> body example
+```json
+{
+  "name": "Frank",
+  "lastname": "Flores",
+  "role": "DEVOPS"
+}
+```
+![POST](docs/post.png?raw=true "POST")
+
+Execute GET
+
+>body example
+```json
+{
+  "offset": 0,
+  "limit": 100,
+  "skip": 0,
+  "order": "name",
+  "fields": {
+    "id": true,
+    "name": true,
+    "lastname": true,
+    "role": true
+  }
+}
+```
+![GET](docs/getall.png?raw=true "GET")
 
