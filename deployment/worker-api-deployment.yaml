@@ -7,7 +7,8 @@ spec:
     matchLabels:
       app: worker-api
   strategy:
-    type: Recreate
+    type: RollingUpdate
+  replicas: 1
   template:
     metadata:
       labels:
@@ -19,9 +20,15 @@ spec:
           env:
             # Use secret in real usage
             - name: MYSQLDB
-              value: worker
+              valueFrom:
+                configMapKeyRef:
+                  name: worker-configmap
+                  key: mysqldb
             - name: MYSQLHOST
-              value: mysql
+              valueFrom:
+                configMapKeyRef:
+                  name: worker-configmap
+                  key: mysqlhost
             - name: MYSQLUSER
               valueFrom:
                 secretKeyRef:
@@ -55,3 +62,22 @@ spec:
       port: 3000
   selector:
     app: worker-api
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-worker-api
+  labels:
+    name: worker-api
+spec:
+  rules:
+    - host: worker-api.guachex.local
+    - http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: worker-api
+                port:
+                  number: 3000

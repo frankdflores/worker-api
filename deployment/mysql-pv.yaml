@@ -5,9 +5,10 @@ metadata:
   labels:
     type: local
 spec:
+  persistentVolumeReclaimPolicy: Recycle
   storageClassName: manual
   capacity:
-    storage: 20Gi
+    storage: 25Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
@@ -23,4 +24,4 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 20Gi
+      storage: 25Gi

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: worker-configmap
+data:
+  mysqldb: worker
+  mysqlhost: mysql
