@@ -1,7 +1,6 @@
-# worker
+# Worker-API
 
-This application is generated using [LoopBack 4 CLI](https://loopback.io/doc/en/lb4/Command-line-interface.html) with the
-[initial project layout](https://loopback.io/doc/en/lb4/Loopback-application-layout.html).
+This application is generated using [LoopBack 4 CLI](https://loopback.io/doc/en/lb4/Command-line-interface.html)
 
 ## Install dependencies
 
@@ -61,15 +60,45 @@ npm run lint:fix
 - `npm run docker:build`: Build a Docker image for this application
 - `npm run docker:run`: Run this application inside a Docker container
 
-## Tests
+## Deployment
 
+### Prerequisites
+To deploy you need to have installed:
+- [docker](https://docs.docker.com/engine/install/)
+- [k3d](https://k3d.io/v5.4.6/#installation)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)
+
+### Deploy k8s with k3d
+Execute the following command:
 ```sh
-npm test
+k3d cluster create --config deployment/k3d.yaml
 ```
 
-## What's next
+### Create Namespaces and set default namespace
+Execute the following command:
+```sh
+kubectl apply -f deployment/manifest.yaml
+kubectl config set-context --current --namespace=dev
+```
 
-Please check out [LoopBack 4 documentation](https://loopback.io/doc/en/lb4/) to
-understand how you can continue to add features to this application.
+### Deploy configmaps and secrets
+Execute the following command:
+```sh
+kubectl apply -f deployment/configmaps.yaml
+kubectl apply -f deployment/mysql-secret.yaml
+```
 
-[![LoopBack](https://github.com/loopbackio/loopback-next/raw/master/docs/site/imgs/branding/Powered-by-LoopBack-Badge-(blue)-@2x.png)](http://loopback.io/)
+### Deploy MySQL volumes and deployment
+Execute the following command:
+```sh
+kubectl apply -f deployment/mysql-pv.yaml
+kubectl apply -f deployment/mysql-deployment.yaml
+```
+
+### Deploy the Worker-API with service and ingress
+Execute the following command:
+```sh
+kubectl apply -f deployment/worker-api-deployment.yaml
+```
+
+
